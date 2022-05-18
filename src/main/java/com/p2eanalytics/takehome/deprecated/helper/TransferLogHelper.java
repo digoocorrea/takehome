@@ -1,4 +1,4 @@
-package com.p2eanalytics.takehome.helper;
+package com.p2eanalytics.takehome.deprecated.helper;
 
 import com.p2eanalytics.takehome.deprecated.model.Transfer;
 import lombok.Data;
