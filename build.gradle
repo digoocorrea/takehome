@@ -1,0 +1,36 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.7'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.p2eanalytics'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.web3j:core:4.8.7'
+	implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+	implementation 'org.apache.httpcomponents:httpclient:4.5.10'
+	implementation 'io.reactivex.rxjava3:rxjava:3.1.4'
+	implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+	implementation 'com.github.jnr:jnr-unixsocket:0.38.17'
+	implementation 'org.java-websocket:Java-WebSocket:1.5.3'
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.13.1'
+	implementation 'com.google.code.gson:gson:2.9.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
