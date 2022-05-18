@@ -37,7 +37,7 @@ public class LoadBaseService {
     @Autowired
     BurnRateRepository burnRep;
 
-    public void loadBase(Date dateFrom, Integer page){
+    public void loadBase(Date dateFrom){
         TransferEvent lastEvent = eventRep.findTopByOrderByBlockTimestampAsc();
 
         Calendar cal = Calendar.getInstance();
@@ -45,9 +45,9 @@ public class LoadBaseService {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.HOUR, 0);
-        Date dateTo = lastEvent != null ? lastEvent.getBlockTimestamp() : cal.getTime();
 
-        dateFrom = cal.getTime();
+        Date dateTo = lastEvent != null ? lastEvent.getBlockTimestamp() : cal.getTime();
+        Integer page = 0;
 
         Integer maxPage = 0;
         log.info("Starting processing at: " + new Date().toString());

@@ -16,9 +16,9 @@ public class LoadRestController {
     @Autowired
     LoadBaseService loadService;
 
-    @GetMapping("transfers/{dateFrom}/{page}")
-    public void loadTransferBase(@PathVariable("date") Date dateFrom, @PathVariable("page") Integer page ){
-        loadService.loadBase(new java.util.Date(dateFrom.getTime()), page);
+    @GetMapping("transfers/{dateFrom}")
+    public void loadTransferBase(@PathVariable("date") Date dateFrom ){
+        loadService.loadBase(new java.util.Date(dateFrom.getTime()));
     }
 
     @GetMapping("mint")

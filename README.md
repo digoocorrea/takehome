@@ -1,9 +1,11 @@
 
 # TAKEHOME PROJECT
 
-**Endpoint:** /load/transfers/{date}/{page}  _(Date: "2022-05-01", Integer: 0)_
+**Endpoint:** /load/transfers/{date}  _(Date: "2022-05-01")_
 
-Recover all transfers on TUS contract token from Moralis DeepIndex API and saves the transfer events as MINT or BURN events on transferEvent collection.
+Recover all transfers from date informed to the current date on TUS contract token from Moralis DeepIndex API and saves the transfer events as MINT or BURN events on transferEvent collection.
+
+If a previous load was in progress the service will pick the last transfer saved and continue from there until syncing the parameter date 
 
 _The event type segmentation follows these rules:_
 - _A mint is anytime a token has been sent from a 0x0 address to any other address_
