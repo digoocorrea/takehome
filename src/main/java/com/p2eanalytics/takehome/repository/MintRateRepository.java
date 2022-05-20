@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface MintRateRepository extends MongoRepository<MintRate, Date> {
 
+    public List<MintRate> findAll();
 
 }

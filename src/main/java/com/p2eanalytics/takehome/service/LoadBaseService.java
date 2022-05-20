@@ -40,15 +40,13 @@ public class LoadBaseService {
     public void loadBase(Date dateFrom){
         TransferEvent lastEvent = eventRep.findTopByOrderByBlockTimestampAsc();
 
-        TimeZone timeZone = TimeZone.getTimeZone("UTC");
-        Calendar cal = Calendar.getInstance(timeZone);
 
-        cal.set(Calendar.MILLISECOND, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.HOUR, 0);
+        Calendar cal = Calendar.getInstance();
+        cal = getZeroHourUTC(cal);
 
         Date dateTo = lastEvent != null ? lastEvent.getBlockTimestamp() : cal.getTime();
+        cal.setTime(dateFrom);
+        dateFrom = getZeroHourUTC(cal).getTime();
         Integer page = 0;
 
         Integer maxPage = 0;
@@ -85,12 +83,12 @@ public class LoadBaseService {
         Double lastMintPercent = 0D;
         for(RateInfoHelper info : eventRep.getRateInfoByEventType(TransferEvent.ContractTokenEvent.MINT)){
             MintRate rate = new MintRate();
-            rate.setTimestamp(new java.sql.Date(info.getTimestamp().getTime()));
+            rate.setTimestamp(info.getTimestamp().getTime());
             rate.setBlockTo(info.getBlockTo());
             rate.setBlockFrom(info.getBlockFrom());
             rate.setMintAmount(info.getAmount());
-            String netSupply = blockchainService.getNetSupplyForBlock(info.getBlockTo()).toString();
-            rate.setNetSupply(Convert.fromWei(netSupply, Convert.Unit.ETHER).doubleValue());
+            double netSupply = blockchainService.getDoubleValueNetSupplyForBlock(info.getBlockTo());
+            rate.setNetSupply(netSupply);
             rate.setMintPercent(rate.getMintAmount()/rate.getNetSupply());
             rate.setMintVariation(rate.getMintPercent() - lastMintPercent);
             lastMintPercent = rate.getMintPercent();
@@ -104,18 +102,28 @@ public class LoadBaseService {
         Double lastBurnPercent = 0D;
         for(RateInfoHelper info : eventRep.getRateInfoByEventType(TransferEvent.ContractTokenEvent.BURN)){
             BurnRate rate = new BurnRate();
-            rate.setTimestamp(new java.sql.Date(info.getTimestamp().getTime()));
+            rate.setTimestamp(info.getTimestamp().getTime());
             rate.setBlockTo(info.getBlockTo());
             rate.setBlockFrom(info.getBlockFrom());
             rate.setBurnAmount(info.getAmount());
-            String netSupply = blockchainService.getNetSupplyForBlock(info.getBlockTo()).toString();
-            rate.setNetSupply(Convert.fromWei(netSupply, Convert.Unit.ETHER).doubleValue());
+            double netSupply = blockchainService.getDoubleValueNetSupplyForBlock(info.getBlockTo());
+            rate.setNetSupply(netSupply);
             rate.setBurnPercent(rate.getBurnAmount()/rate.getNetSupply());
             rate.setBurnVariation(rate.getBurnPercent() - lastBurnPercent);
             lastBurnPercent = rate.getBurnPercent();
             burnRep.save(rate);
         }
 
+    }
+
+    private Calendar getZeroHourUTC(Calendar cal){
+        TimeZone timeZone = TimeZone.getTimeZone("UTC");
+        cal.setTimeZone(timeZone);
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.HOUR, 0);
+        return cal;
     }
 
 

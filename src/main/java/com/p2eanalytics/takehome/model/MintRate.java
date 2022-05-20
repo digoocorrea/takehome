@@ -13,7 +13,7 @@ import java.sql.Date;
 @Document("mintRate")
 public class MintRate {
     @Id
-    Date timestamp;
+    Long timestamp;
     BigInteger blockFrom;
     BigInteger blockTo;
     Double netSupply;

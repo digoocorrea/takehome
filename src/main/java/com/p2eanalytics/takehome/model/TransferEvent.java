@@ -10,6 +10,7 @@ import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 
 @Data
@@ -66,8 +67,8 @@ public class TransferEvent {
 
     @SneakyThrows
     private Date getDateForDay(Date date) {
+        String dateStr = Instant.ofEpochMilli(date.getTime()).toString().substring(0,10);
         SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
-        String dateStr = dateParser.format(date);
         dateParser.setTimeZone(TimeZone.getTimeZone("GMT"));
         return dateParser.parse(dateStr);
     }

@@ -222,7 +222,7 @@ public class BlockchainSyncService {
         rate.setMintAmount(helper.getAmount());
         rate.setBlockTo(helper.getBlockTo());
         rate.setBlockFrom(helper.getBlockFrom());
-        rate.setTimestamp(new java.sql.Date(from.getTime()));
+        rate.setTimestamp(from.getTime());
         BigInteger netSupply = getNetSupplyForBlock(rate.getBlockTo());
         rate.setNetSupply(Convert.fromWei(netSupply.toString(), Convert.Unit.ETHER).doubleValue());
 
@@ -312,6 +312,28 @@ public class BlockchainSyncService {
         }
 
         return supply;
+    }
+
+    public double getDoubleValueNetSupplyForBlock(BigInteger blockNumber){
+
+        BigInteger supply = getNetSupplyForBlock(blockNumber);
+        double finalSupply = 0D;
+
+        try {
+            token.setDefaultBlockParameter(DefaultBlockParameter.valueOf(blockNumber));
+
+            BigInteger burnBalance = token.balanceOf(feeAddr).sendAsync().get();
+            finalSupply = Convert.fromWei(supply.toString(), Convert.Unit.ETHER).doubleValue() -
+                            Convert.fromWei(burnBalance.toString(), Convert.Unit.ETHER).doubleValue();
+            log.info("BurnBalance for block "+ blockNumber +" is: " + burnBalance);
+            log.info("TotalSupply for block "+ blockNumber +" is: " + supply);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+
+        return finalSupply;
     }
 
     public Erc20Wrapper getToken(){

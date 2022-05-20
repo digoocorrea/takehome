@@ -3,11 +3,10 @@ package com.p2eanalytics.takehome.helper;
 import lombok.Data;
 
 import java.math.BigInteger;
-import java.util.Date;
 
 @Data
 public class InflationRateHelper {
-    Date timestamp;
+    Long timestamp;
     Double netSupply;
     Double mintAmount;
     Double mintPercent;

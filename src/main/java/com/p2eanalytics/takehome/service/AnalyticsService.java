@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class AnalyticsService {
     public List<InflationRateHelper> getInflationRates(){
         List<InflationRateHelper> inflationRates = new ArrayList<>();
 
-        HashMap<Date, HandleMintBurnHelper> dateRatesMap = getMappedRatesByDate();
+        HashMap<Long, HandleMintBurnHelper> dateRatesMap = getMappedRatesByDate();
 
         dateRatesMap.forEach((date, rate) -> {
             InflationRateHelper inflation = new InflationRateHelper();
@@ -49,8 +49,8 @@ public class AnalyticsService {
         return inflationRates;
     }
 
-    private HashMap<Date, HandleMintBurnHelper> getMappedRatesByDate(){
-        HashMap<Date, HandleMintBurnHelper> dateRatesMap = new HashMap<>();
+    private HashMap<Long, HandleMintBurnHelper> getMappedRatesByDate(){
+        HashMap<Long, HandleMintBurnHelper> dateRatesMap = new HashMap<>();
 
         for(MintRate mint : mintRep.findAll(Sort.by(Sort.Direction.ASC, "timestamp"))){
             HandleMintBurnHelper helper = new HandleMintBurnHelper();
@@ -59,9 +59,7 @@ public class AnalyticsService {
         }
 
         for(BurnRate burn : burnRep.findAll(Sort.by(Sort.Direction.ASC, "timestamp"))){
-
             HandleMintBurnHelper helper = dateRatesMap.get(burn.getTimestamp());
-
             if(helper == null){
                 helper = new HandleMintBurnHelper();
             }
@@ -69,25 +67,6 @@ public class AnalyticsService {
             helper.setBurn(burn);
             dateRatesMap.put(burn.getTimestamp(), helper);
         }
-
-        dateRatesMap.forEach((date, rate) ->{
-            if (rate.getMint() == null){
-                MintRate mint = new MintRate();
-                mint.setMintAmount(0D);
-                mint.setBlockFrom(BigInteger.valueOf(0));
-                mint.setBlockTo(BigInteger.valueOf(0));
-                mint.setMintPercent(0D);
-                rate.setMint(mint);
-            }
-            if (rate.getBurn() == null){
-                BurnRate burn = new BurnRate();
-                burn.setBurnAmount(0D);
-                burn.setBlockFrom(BigInteger.valueOf(0));
-                burn.setBlockTo(BigInteger.valueOf(0));
-                burn.setBurnPercent(0D);
-                rate.setBurn(burn);
-            }
-        });
 
         return dateRatesMap;
     }
