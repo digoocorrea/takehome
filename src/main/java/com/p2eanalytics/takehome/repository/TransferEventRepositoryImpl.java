@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +30,7 @@ public class TransferEventRepositoryImpl implements TransferEventRepositoryCusto
                 .sum("amount").as("amount")
                 .min("blockNumber").as("blockFrom")
                 .max("blockNumber").as("blockTo")
+                .max("date").as("date")
         );
 
         Aggregation agg = Aggregation.newAggregation(ops);
