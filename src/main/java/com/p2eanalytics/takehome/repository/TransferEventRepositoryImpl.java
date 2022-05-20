@@ -26,7 +26,7 @@ public class TransferEventRepositoryImpl implements TransferEventRepositoryCusto
 
         ops.add(Aggregation.match(new Criteria("eventType").is(eventType)));
 
-        ops.add(Aggregation.group("eventType")
+        ops.add(Aggregation.group("date")
                 .sum("amount").as("amount")
                 .min("blockNumber").as("blockFrom")
                 .max("blockNumber").as("blockTo")
