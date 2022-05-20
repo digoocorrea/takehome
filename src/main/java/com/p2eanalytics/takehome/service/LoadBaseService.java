@@ -40,7 +40,9 @@ public class LoadBaseService {
     public void loadBase(Date dateFrom){
         TransferEvent lastEvent = eventRep.findTopByOrderByBlockTimestampAsc();
 
-        Calendar cal = Calendar.getInstance();
+        TimeZone timeZone = TimeZone.getTimeZone("UTC");
+        Calendar cal = Calendar.getInstance(timeZone);
+
         cal.set(Calendar.MILLISECOND, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MINUTE, 0);
