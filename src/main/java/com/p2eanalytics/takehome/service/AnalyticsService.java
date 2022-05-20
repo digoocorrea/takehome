@@ -11,10 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.*;
 import java.sql.Date;
-import java.util.HashMap;
-import java.util.List;
 
 @Service
 public class AnalyticsService {
@@ -45,6 +43,14 @@ public class AnalyticsService {
             inflationRates.add(inflation);
 
         });
+        Comparator<InflationRateHelper> sortByTimestamp =  new Comparator<InflationRateHelper>() {
+            @Override
+            public int compare(InflationRateHelper rate1, InflationRateHelper rate2) {
+
+                return rate1.getTimestamp() > rate2.getTimestamp() ? 1 : -1;
+            }
+        };
+        Collections.sort(inflationRates,sortByTimestamp);
 
         return inflationRates;
     }
