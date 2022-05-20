@@ -39,9 +39,10 @@ public class TransferEventRepositoryImpl implements TransferEventRepositoryCusto
 
         List<Map<String, Object>> set =  (List<Map<String, Object>>) result.getRawResults().get("results") ;
 
-        RateInfoHelper rate = new RateInfoHelper();
+
         List<RateInfoHelper> rates = new ArrayList<>();
         for(Map<String, Object> obj : set) {
+            RateInfoHelper rate = new RateInfoHelper();
             rate.setTimestamp((Date) obj.get("date"));
             rate.setAmount((double) obj.get("amount"));
             rate.setBlockFrom(BigInteger.valueOf(Long.valueOf((String) obj.get("blockFrom"))));
