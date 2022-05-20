@@ -17,7 +17,7 @@ public class LoadRestController {
     LoadBaseService loadService;
 
     @GetMapping("transfers/{dateFrom}")
-    public void loadTransferBase(@PathVariable("date") Date dateFrom ){
+    public void loadTransferBase(@PathVariable("dateFrom") Date dateFrom ){
         loadService.loadBase(new java.util.Date(dateFrom.getTime()));
     }
 
